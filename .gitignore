@@ -1,0 +1,7 @@
+# Ignorar pastas e arquivos de ambiente virtual
+venv/
+*.pyc
+__pycache__/
+
+# Ignorar arquivos de credenciais
+credenciais.py
