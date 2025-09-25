@@ -5,3 +5,5 @@ __pycache__/
 
 # Ignorar arquivos de credenciais
 credenciais.py
+
+.pytest_cache
