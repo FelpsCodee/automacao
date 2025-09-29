@@ -1,5 +1,6 @@
 import pytest
 import requests
+import pprint
 
 def test_api_retorna_200():
    url = "https://www.kabum.com.br"
@@ -14,16 +15,30 @@ def test_api_retorna_200():
 import requests
 
 def test_api_autocomplete_kabum_sugere_termo_correto():
-      url_api = "https://servicespub.prod.api.aws.grupokabum.com.br/catalog/v2/sponsored_products?query=rtx%205060&context=search"
-      termo = "RTX 5060"
+      url_api = "https://servicespub.prod.api.aws.grupokabum.com.br/catalog/v2/search"
+      termo = "mouse"      
       
-      response = requests.get(url_api)
-      response_em_json = response.json()
-
-      status = response.status_code
-      print()
-      print(status)
-
-test_api_autocomplete_kabum_sugere_termo_correto()      
+      parametros = {
+            'query': termo,
+            'page_size':5,
+            'sort': 'most_searched',
+            'is_prime':'true',
+      }
       
-   
+      
+      response = requests.get(url_api, parametros)
+      dados = response.json()
+      print(dados['title'])
+      
+      assert len(dados['products']) > 0
+      
+      listas_de_produtos = dados['products']
+      
+      for produto in listas_de_produtos:
+            nome_produtos = produto['name']
+            
+      
+      assert  termo.lower in nome_produtos
+      
+test_api_autocomplete_kabum_sugere_termo_correto()
+
