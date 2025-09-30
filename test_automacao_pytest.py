@@ -1,6 +1,5 @@
 import pytest
 import requests
-import pprint
 
 def test_api_retorna_200():
    url = "https://www.kabum.com.br"
@@ -11,34 +10,38 @@ def test_api_retorna_200():
 
    response  = requests.get(url, headers=headers)
    assert response.status_code == 200
-   
-import requests
 
-def test_api_autocomplete_kabum_sugere_termo_correto():
-      url_api = "https://servicespub.prod.api.aws.grupokabum.com.br/catalog/v2/search"
-      termo = "mouse"      
+def test_verificar_mouses():
+      url_api = "https://servicespub.prod.api.aws.grupokabum.com.br/catalog/v2/products-by-category/perifericos/-mouse-gamer?page_number=1&page_size=100&facet_filters=&sort=most_searched&is_prime=true&payload_data=products_category_filters&include=gift"
+      termo = "Mouse"      
       
       parametros = {
             'query': termo,
-            'page_size':5,
+            'page_size':100,
             'sort': 'most_searched',
             'is_prime':'true',
       }
       
-      
-      response = requests.get(url_api, parametros)
+      nome_produtos = []
+      response = requests.get(url_api, params=parametros)
       dados = response.json()
-      print(dados['title'])
+
       
-      assert len(dados['products']) > 0
+      assert len(dados['data']) > 0
       
-      listas_de_produtos = dados['products']
+      listas_de_produtos = dados['data']
       
       for produto in listas_de_produtos:
-            nome_produtos = produto['name']
-            
+        mouses = produto['attributes']['title']
+        nome_produtos.append(mouses)
+        
+        
+        print(nome_produtos)
+       
+      print(f"foram {len(nome_produtos)} produtos encontrados")
       
-      assert  termo.lower in nome_produtos
-      
-test_api_autocomplete_kabum_sugere_termo_correto()
+      for produto in nome_produtos:
+            assert termo in produto
+
+test_verificar_mouses()
 
